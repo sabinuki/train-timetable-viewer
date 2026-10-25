@@ -1,0 +1,1238 @@
+{
+  "calendars" : {
+    "holiday" : [
+      {
+        "destination" : "中央",
+        "time" : "05:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "05:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "05:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "05:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "05:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "06:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "06:19",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "06:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "06:43",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "06:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "08:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "08:19",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "08:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "08:43",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "08:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "10:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "10:19",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "10:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "10:43",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "10:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "12:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "12:19",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "12:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "12:43",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "12:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "14:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "14:19",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "14:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "14:43",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "14:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "16:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "16:19",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "16:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "16:43",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "16:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "18:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "18:19",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "18:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "18:43",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "18:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "20:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "20:19",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "20:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "20:43",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "20:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "港町",
+        "time" : "22:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "22:19",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "22:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "22:43",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "22:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "港町",
+        "time" : "23:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "23:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "23:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "23:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "23:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "24:10",
+        "type" : "各停"
+      },
+      {
+        "destination" : "港町",
+        "time" : "24:28",
+        "type" : "各停"
+      }
+    ],
+    "weekday" : [
+      {
+        "destination" : "中央",
+        "time" : "05:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "05:11",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "05:19",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "05:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "05:35",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "05:43",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "05:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "05:59",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "06:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "06:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "06:23",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "06:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "06:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "06:47",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "06:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:11",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:19",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:35",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:43",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "07:59",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "08:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "08:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "08:23",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "08:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "08:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "08:47",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "08:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:11",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:19",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:35",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:43",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "09:59",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "10:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "10:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "10:23",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "10:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "10:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "10:47",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "10:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:11",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:19",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:35",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:43",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "11:59",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "12:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "12:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "12:23",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "12:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "12:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "12:47",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "12:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:11",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:19",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:35",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:43",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "13:59",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "14:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "14:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "14:23",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "14:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "14:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "14:47",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "14:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:11",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:19",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:35",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:43",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "15:59",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "16:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "16:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "16:23",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "16:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "16:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "16:47",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "16:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:11",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:19",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:35",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:43",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "17:59",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "18:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "18:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "18:23",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "18:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "18:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "18:47",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "18:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:11",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:19",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:35",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:43",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "19:59",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "20:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "20:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "20:23",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "20:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "20:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "20:47",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "20:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:11",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:19",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:35",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:43",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "21:59",
+        "type" : "快速"
+      },
+      {
+        "destination" : "港町",
+        "time" : "22:07",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "22:15",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "22:23",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "22:31",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "22:39",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "22:47",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "22:55",
+        "type" : "各停"
+      },
+      {
+        "destination" : "港町",
+        "time" : "23:03",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "23:11",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "23:19",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "23:27",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "23:35",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "23:43",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "23:51",
+        "type" : "各停"
+      },
+      {
+        "destination" : "中央",
+        "time" : "23:59",
+        "type" : "快速"
+      },
+      {
+        "destination" : "中央",
+        "time" : "24:05",
+        "type" : "各停"
+      },
+      {
+        "destination" : "港町",
+        "time" : "24:18",
+        "type" : "各停"
+      },
+      {
+        "destination" : "港町",
+        "time" : "24:32",
+        "type" : "各停"
+      }
+    ]
+  },
+  "direction" : {
+    "id" : "sample-up",
+    "name" : "中央方面"
+  },
+  "line" : {
+    "id" : "sample-line",
+    "name" : "サンプル線"
+  },
+  "source" : "manual",
+  "station" : {
+    "id" : "sample-station",
+    "name" : "サンプル駅"
+  },
+  "validFrom" : "2026-03-14",
+  "version" : 1
+}

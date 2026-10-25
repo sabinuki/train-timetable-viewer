@@ -16,6 +16,10 @@ jobs:
           swift --version
       - name: Test TimetableCore
         run: swift test --package-path Packages/TimetableCore
+      - name: Check SampleTimetable.json is up to date
+        run: |
+          scripts/make-timetable.sh scripts/sample-timetable.txt -o App/TrainTimetableViewer/Resources/SampleTimetable.json
+          git diff --exit-code App/TrainTimetableViewer/Resources/SampleTimetable.json
       - name: Build app
         run: >
           xcodebuild
