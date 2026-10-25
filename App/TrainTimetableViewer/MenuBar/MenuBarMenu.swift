@@ -11,6 +11,16 @@ struct MenuBarMenu: View {
     var body: some View {
         summary
         Divider()
+        if viewModel.profiles.count > 1 {
+            Menu("路線切替") {
+                ForEach(viewModel.profiles) { profile in
+                    Toggle(profile.name, isOn: Binding(
+                        get: { profile.id == viewModel.selectedProfileID },
+                        set: { if $0 { viewModel.selectProfile(profile.id) } }))
+                }
+            }
+            Divider()
+        }
         Button(model.isPanelVisible ? "パネルを隠す" : "パネルを表示") {
             model.togglePanel()
         }

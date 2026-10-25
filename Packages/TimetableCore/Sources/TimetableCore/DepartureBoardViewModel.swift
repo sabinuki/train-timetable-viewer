@@ -19,16 +19,27 @@ public final class DepartureBoardViewModel {
     public private(set) var timetable: Timetable?
     /// 駅・路線・方面ごとの時刻表
     public private(set) var routes: [String: [Timetable]] = [:]
-    public private(set) var selectedRouteKey: String?
 
-    /// 駅までの所要時間（分）。変更すると保存して再計算する
+    /// 路線プロファイル（設計書 §1.1）
+    public private(set) var profiles: [RouteProfile] = []
+    public private(set) var selectedProfileID: UUID?
+
+    public var selectedProfile: RouteProfile? {
+        profiles.first { $0.id == selectedProfileID }
+    }
+
+    /// 表示中の駅・路線・方面
+    public var selectedRouteKey: String? {
+        selectedProfile?.routeKey
+    }
+
+    /// 表示中のプロファイルの、駅までの所要時間（分）。変更すると保存して再計算する
     public var minutesToStation: Int {
-        didSet {
-            settings.minutesToStation = minutesToStation
-            if minutesToStation != settings.minutesToStation {
-                minutesToStation = settings.minutesToStation
-            }
-            refresh()
+        get { selectedProfile?.minutesToStation ?? 0 }
+        set {
+            guard var profile = selectedProfile else { return }
+            profile.minutesToStation = AppSettings.clamp(newValue)
+            updateProfile(profile)
         }
     }
 
@@ -42,27 +53,114 @@ public final class DepartureBoardViewModel {
         self.service = service
         self.settings = settings
         self.now = now
-        self.minutesToStation = settings.minutesToStation
         self.displayCount = settings.displayCount
-        self.selectedRouteKey = settings.selectedRouteKey
+        self.profiles = settings.profiles ?? []
+        self.selectedProfileID = settings.selectedProfileID
     }
 
-    /// 保存済みの時刻表を読み込み直す。選択中の路線がなければ最初の路線を選ぶ
+    /// 保存済みの時刻表を読み込み直す。プロファイルがなければ作る
     public func load(_ timetables: [Timetable]) {
         routes = Dictionary(grouping: timetables, by: \.routeKey)
-        if selectedRouteKey.map({ routes[$0] == nil }) ?? true {
-            selectedRouteKey = routes.keys.sorted().first
-            settings.selectedRouteKey = selectedRouteKey
+        if settings.profiles == nil {
+            migrateLegacySettings()
         }
+        if profiles.isEmpty, let routeKey = routes.keys.sorted().first {
+            profiles = [makeProfile(routeKey: routeKey)]
+        }
+        if selectedProfile == nil {
+            selectedProfileID = profiles.first?.id
+        }
+        saveProfiles()
         refresh()
     }
 
-    /// 表示する駅・路線・方面を選ぶ（取り込んだ直後など）
-    public func selectRoute(_ routeKey: String) {
-        guard routes[routeKey] != nil else { return }
-        selectedRouteKey = routeKey
-        settings.selectedRouteKey = routeKey
+    /// 路線プロファイル導入前の単一の設定を、プロファイル 1 件として移行する
+    private func migrateLegacySettings() {
+        guard profiles.isEmpty else { return }
+        let routeKey = settings.legacySelectedRouteKey.flatMap { routes[$0] == nil ? nil : $0 }
+            ?? routes.keys.sorted().first
+        guard routeKey != nil || settings.legacyMinutesToStation != nil else { return }
+        profiles = [makeProfile(routeKey: routeKey, minutesToStation: settings.legacyMinutesToStation ?? 0)]
+    }
+
+    // MARK: - 路線プロファイルの操作
+
+    /// 表示するプロファイルを切り替える
+    public func selectProfile(_ id: UUID) {
+        guard profiles.contains(where: { $0.id == id }) else { return }
+        selectedProfileID = id
+        saveProfiles()
         refresh()
+    }
+
+    /// 取り込んだ時刻表を表示する。その駅・路線・方面のプロファイルがあれば切り替え、
+    /// 表示中のプロファイルに時刻表がなければ割り当て、どちらでもなければ新しいプロファイルを作る
+    public func showRoute(_ routeKey: String) {
+        guard routes[routeKey] != nil else { return }
+        if let existing = profiles.first(where: { $0.routeKey == routeKey }) {
+            selectedProfileID = existing.id
+        } else if var current = selectedProfile, current.routeKey.map({ routes[$0] == nil }) ?? true {
+            current.routeKey = routeKey
+            if current.name == RouteProfile.defaultName(for: nil) {
+                current.name = RouteProfile.defaultName(for: routes[routeKey]?.first)
+            }
+            replace(current)
+        } else {
+            let profile = makeProfile(routeKey: routeKey)
+            profiles.append(profile)
+            selectedProfileID = profile.id
+        }
+        saveProfiles()
+        refresh()
+    }
+
+    /// プロファイルを追加して表示する
+    @discardableResult
+    public func addProfile(routeKey: String? = nil) -> RouteProfile {
+        let profile = makeProfile(routeKey: routeKey ?? selectedRouteKey ?? routes.keys.sorted().first)
+        profiles.append(profile)
+        selectedProfileID = profile.id
+        saveProfiles()
+        refresh()
+        return profile
+    }
+
+    /// プロファイルの名前、時刻表、所要時間などを変更する
+    public func updateProfile(_ profile: RouteProfile) {
+        guard profiles.contains(where: { $0.id == profile.id }) else { return }
+        var profile = profile
+        profile.minutesToStation = AppSettings.clamp(profile.minutesToStation)
+        replace(profile)
+        saveProfiles()
+        refresh()
+    }
+
+    /// プロファイルを削除する。表示中のプロファイルを削除した場合は先頭のプロファイルを表示する
+    public func deleteProfile(_ id: UUID) {
+        profiles.removeAll { $0.id == id }
+        if selectedProfileID == id {
+            selectedProfileID = profiles.first?.id
+        }
+        saveProfiles()
+        refresh()
+    }
+
+    private func makeProfile(routeKey: String?, minutesToStation: Int = 0) -> RouteProfile {
+        RouteProfile(
+            name: RouteProfile.defaultName(for: routeKey.flatMap { routes[$0]?.first }),
+            routeKey: routeKey,
+            minutesToStation: minutesToStation)
+    }
+
+    private func replace(_ profile: RouteProfile) {
+        if let index = profiles.firstIndex(where: { $0.id == profile.id }) {
+            profiles[index] = profile
+        }
+    }
+
+    private func saveProfiles() {
+        settings.profiles = profiles
+        settings.selectedProfileID = selectedProfileID
     }
 
     /// 現在時刻で再計算する
