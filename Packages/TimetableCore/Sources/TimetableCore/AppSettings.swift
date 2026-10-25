@@ -7,6 +7,7 @@ public struct AppSettings {
     public static let minutesToStationRange = 0...120
     public static let defaultDisplayCount = 5
     public static let panelOpacityRange = 0.3...1.0
+    public static let displayCountRange = 3...10
 
     private enum Key {
         static let minutesToStation = "minutesToStation"
@@ -16,6 +17,11 @@ public struct AppSettings {
         static let isPanelVisible = "isPanelVisible"
         static let panelOpacity = "panelOpacity"
         static let isClickThrough = "isClickThrough"
+        static let displayCount = "displayCount"
+        static let menuBarStyle = "menuBarStyle"
+        static let showsSeconds = "showsSeconds"
+        static let additionalHolidays = "additionalHolidays"
+        static let hotKey = "hotKey"
     }
 
     public init(defaults: UserDefaults = .standard) {
@@ -73,12 +79,82 @@ public struct AppSettings {
         nonmutating set { defaults.set(newValue, forKey: Key.isClickThrough) }
     }
 
-    /// パネルに表示する本数。設定画面からの変更は #20 で追加する
+    /// パネルに表示する本数（3〜10）
     public var displayCount: Int {
-        Self.defaultDisplayCount
+        get {
+            let value = defaults.object(forKey: Key.displayCount) as? Int ?? Self.defaultDisplayCount
+            return min(max(value, Self.displayCountRange.lowerBound), Self.displayCountRange.upperBound)
+        }
+        nonmutating set {
+            defaults.set(min(max(newValue, Self.displayCountRange.lowerBound), Self.displayCountRange.upperBound), forKey: Key.displayCount)
+        }
+    }
+
+    /// メニューバーの表示形式
+    public var menuBarStyle: MenuBarStyle {
+        get { defaults.string(forKey: Key.menuBarStyle).flatMap(MenuBarStyle.init(rawValue:)) ?? .nextDeparture }
+        nonmutating set { defaults.set(newValue.rawValue, forKey: Key.menuBarStyle) }
+    }
+
+    /// 残り時間を秒単位で表示するか
+    public var showsSeconds: Bool {
+        get { defaults.bool(forKey: Key.showsSeconds) }
+        nonmutating set { defaults.set(newValue, forKey: Key.showsSeconds) }
+    }
+
+    /// 土休日ダイヤとして扱う追加の日（年末年始など）
+    public var additionalHolidays: Set<CalendarDate> {
+        get { Set((defaults.stringArray(forKey: Key.additionalHolidays) ?? []).compactMap(CalendarDate.init(string:))) }
+        nonmutating set { defaults.set(newValue.sorted().map(\.description), forKey: Key.additionalHolidays) }
+    }
+
+    /// パネルの表示を切り替えるグローバルショートカット
+    public var hotKey: HotKeySetting {
+        get {
+            guard let data = defaults.data(forKey: Key.hotKey),
+                  let setting = try? JSONDecoder().decode(HotKeySetting.self, from: data)
+            else { return .default }
+            return setting
+        }
+        nonmutating set { defaults.set(try? JSONEncoder().encode(newValue), forKey: Key.hotKey) }
     }
 
     public static func clamp(_ minutes: Int) -> Int {
         min(max(minutes, minutesToStationRange.lowerBound), minutesToStationRange.upperBound)
     }
+}
+
+/// メニューバーの表示形式（設計書 §6.1）
+public enum MenuBarStyle: String, CaseIterable, Sendable {
+    /// 次発の時刻と残り時間（例: `18:05 あと12分`）
+    case nextDeparture
+    /// 出発すべき時刻と残り時間（例: `17:57 出発 あと4分`）
+    case leaveBy
+    /// アイコンのみ
+    case iconOnly
+
+    public var displayName: String {
+        switch self {
+        case .nextDeparture: "次発の時刻"
+        case .leaveBy: "出発すべき時刻"
+        case .iconOnly: "アイコンのみ"
+        }
+    }
+}
+
+/// グローバルショートカットのキーの組み合わせ。値は Carbon の仮想キーコードと修飾キー
+public struct HotKeySetting: Codable, Hashable, Sendable {
+    public var keyCode: UInt32
+    public var carbonModifiers: UInt32
+    /// 表示用（例: `⌥⌘T`）
+    public var label: String
+
+    public init(keyCode: UInt32, carbonModifiers: UInt32, label: String) {
+        self.keyCode = keyCode
+        self.carbonModifiers = carbonModifiers
+        self.label = label
+    }
+
+    /// ⌥⌘T（kVK_ANSI_T = 0x11、optionKey | cmdKey = 0x0800 | 0x0100）
+    public static let `default` = HotKeySetting(keyCode: 0x11, carbonModifiers: 0x0900, label: "⌥⌘T")
 }

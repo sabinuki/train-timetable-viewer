@@ -9,7 +9,7 @@ struct SettingsView: View {
             RouteSettingsView(model: model)
                 .tabItem { Label("路線", systemImage: "tram") }
             PanelSettingsView(model: model)
-                .tabItem { Label("パネル", systemImage: "macwindow") }
+                .tabItem { Label("表示", systemImage: "macwindow") }
             GeneralSettingsView(model: model)
                 .tabItem { Label("一般", systemImage: "gearshape") }
         }

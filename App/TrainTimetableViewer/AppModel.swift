@@ -35,13 +35,53 @@ final class AppModel {
         }
         reloadTimetables()
         let clock = RefreshClock { [weak self] in self?.viewModel.refresh() }
+        clock.perSecond = viewModel.showsSeconds
         clock.start()
         self.clock = clock
         setUpPanel()
 
-        let hotKey = GlobalHotKey { [weak self] in self?.togglePanel() }
+        hotKeySetting = settings.hotKey
+        let hotKey = GlobalHotKey(setting: hotKeySetting) { [weak self] in self?.togglePanel() }
         isHotKeyRegistered = hotKey.register()
         self.hotKey = hotKey
+    }
+
+    // MARK: - 表示
+
+    /// 残り時間を秒単位で表示するか。オンのときだけ毎秒再計算する
+    var showsSeconds: Bool {
+        get { viewModel.showsSeconds }
+        set {
+            viewModel.showsSeconds = newValue
+            clock?.perSecond = newValue
+        }
+    }
+
+    // MARK: - グローバルショートカット
+
+    private(set) var hotKeySetting: HotKeySetting = .default
+
+    /// ショートカットを変更する。登録できなければ元に戻して false
+    @discardableResult
+    func setHotKey(_ setting: HotKeySetting) -> Bool {
+        guard let hotKey else { return false }
+        if hotKey.update(setting) {
+            hotKeySetting = setting
+            settings.hotKey = setting
+            isHotKeyRegistered = true
+            return true
+        }
+        isHotKeyRegistered = hotKey.update(hotKeySetting)
+        return false
+    }
+
+    /// 設定画面でキーを記録している間は、今のショートカットを外す（押したキーで切り替わらないように）
+    func suspendHotKey() {
+        hotKey?.unregister()
+    }
+
+    func resumeHotKey() {
+        isHotKeyRegistered = hotKey?.update(hotKeySetting) ?? false
     }
 
     // MARK: - パネル

@@ -2,13 +2,20 @@ import AppKit
 import TimetableCore
 
 /// 再計算のきっかけを作る（設計書 §9.3）
-/// - 毎分 0 秒
+/// - 毎分 0 秒（秒表示のときは毎秒）
 /// - スリープ復帰、システム時刻の変更、日付の変更
 @MainActor
 final class RefreshClock {
     private let onTick: @MainActor () -> Void
     private var timer: Timer?
     private var observers: [(NotificationCenter, NSObjectProtocol)] = []
+
+    /// 毎秒再計算するか（残り時間を秒単位で表示するとき）
+    var perSecond = false {
+        didSet {
+            if perSecond != oldValue, !observers.isEmpty { scheduleNextTick() }
+        }
+    }
 
     init(onTick: @escaping @MainActor () -> Void) {
         self.onTick = onTick
@@ -43,13 +50,14 @@ final class RefreshClock {
         scheduleNextTick()
     }
 
-    /// 次の分の 0 秒に 1 回だけ発火するタイマーを置き直す（スリープでずれても次の発火で揃う）
+    /// 次の分（秒表示のときは次の秒）の 0 秒に 1 回だけ発火するタイマーを置き直す（スリープでずれても次の発火で揃う）
     private func scheduleNextTick() {
         timer?.invalidate()
-        let timer = Timer(fire: nextMinuteBoundary(after: Date()), interval: 0, repeats: false) { [weak self] _ in
+        let fireDate = perSecond ? nextSecondBoundary(after: Date()) : nextMinuteBoundary(after: Date())
+        let timer = Timer(fire: fireDate, interval: 0, repeats: false) { [weak self] _ in
             MainActor.assumeIsolated { self?.tick() }
         }
-        timer.tolerance = 0.2
+        timer.tolerance = perSecond ? 0.05 : 0.2
         RunLoop.main.add(timer, forMode: .common)
         self.timer = timer
     }
