@@ -32,7 +32,12 @@ final class NotificationScheduler: NSObject, UNUserNotificationCenterDelegate {
     }
 
     func refreshAuthorizationStatus() async {
-        authorizationStatus = await center.notificationSettings().authorizationStatus
+        authorizationStatus = await Self.currentAuthorizationStatus()
+    }
+
+    /// `UNNotificationSettings` は SDK によって Sendable でないため、メインアクターの外で状態だけを取り出す
+    private nonisolated static func currentAuthorizationStatus() async -> UNAuthorizationStatus {
+        await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
     }
 
     func openSystemSettings() {
