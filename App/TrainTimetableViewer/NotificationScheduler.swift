@@ -27,7 +27,7 @@ final class NotificationScheduler: NSObject, UNUserNotificationCenterDelegate {
 
     /// 通知の許可を求める（通知をオンにしたとき）
     func requestAuthorization() async {
-        _ = try? await center.requestAuthorization(options: [.alert, .sound])
+        await Self.requestAuthorizationFromSystem()
         await refreshAuthorizationStatus()
     }
 
@@ -35,7 +35,13 @@ final class NotificationScheduler: NSObject, UNUserNotificationCenterDelegate {
         authorizationStatus = await Self.currentAuthorizationStatus()
     }
 
-    /// `UNNotificationSettings` は SDK によって Sendable でないため、メインアクターの外で状態だけを取り出す
+    // `UNUserNotificationCenter` と `UNNotificationSettings` は SDK によって Sendable でないため、
+    // async の呼び出しはメインアクターの外で行い、Sendable な値だけを返す
+
+    private nonisolated static func requestAuthorizationFromSystem() async {
+        _ = try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
+    }
+
     private nonisolated static func currentAuthorizationStatus() async -> UNAuthorizationStatus {
         await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
     }
