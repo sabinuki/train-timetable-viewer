@@ -17,6 +17,7 @@ struct RouteSettingsView: View {
             profileSection
             if let profile = viewModel.selectedProfile {
                 notificationSection(profile)
+                filterSection(profile)
             }
             timetableSection
         }
@@ -136,6 +137,59 @@ struct RouteSettingsView: View {
                 .foregroundStyle(.secondary)
         }
         .task { await model.notifications.refreshAuthorizationStatus() }
+    }
+
+    // MARK: - 絞り込み
+
+    @ViewBuilder
+    private func filterSection(_ profile: RouteProfile) -> some View {
+        let candidates = viewModel.filterCandidates
+        if !candidates.types.isEmpty || !candidates.destinations.isEmpty {
+            Section {
+                if !candidates.types.isEmpty {
+                    LabeledContent("種別") {
+                        VStack(alignment: .leading) {
+                            ForEach(candidates.types, id: \.self) { type in
+                                Toggle(type, isOn: inclusionBinding(for: profile, \.excludedTypes, value: type))
+                            }
+                        }
+                    }
+                }
+                if !candidates.destinations.isEmpty {
+                    LabeledContent("行き先") {
+                        VStack(alignment: .leading) {
+                            ForEach(candidates.destinations, id: \.self) { destination in
+                                Toggle("\(destination)行", isOn: inclusionBinding(for: profile, \.excludedDestinations, value: destination))
+                            }
+                        }
+                    }
+                }
+            } header: {
+                Text("表示する電車")
+            } footer: {
+                Text("チェックを外した種別や行き先の電車は、メニューバー、パネル、通知に出しません")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    /// 除外リストに入っていなければ true（表示する）
+    private func inclusionBinding(
+        for profile: RouteProfile,
+        _ keyPath: WritableKeyPath<RouteProfile, Set<String>>,
+        value: String
+    ) -> Binding<Bool> {
+        let excluded = binding(for: profile, keyPath)
+        return Binding(
+            get: { !excluded.wrappedValue.contains(value) },
+            set: { included in
+                if included {
+                    excluded.wrappedValue.remove(value)
+                } else {
+                    excluded.wrappedValue.insert(value)
+                }
+            })
     }
 
     /// 0:00 からの分を `DatePicker` で編集する

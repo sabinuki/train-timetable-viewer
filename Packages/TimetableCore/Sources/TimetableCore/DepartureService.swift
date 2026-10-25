@@ -1,6 +1,6 @@
 import Foundation
 
-/// 表示する発車の絞り込み条件。種別や行き先による除外は #16 で追加する
+/// 表示する発車の絞り込み条件
 public struct DepartureFilter: Sendable {
     private let predicate: @Sendable (Departure) -> Bool
 
@@ -10,6 +10,18 @@ public struct DepartureFilter: Sendable {
 
     /// すべての発車を表示する
     public static let all = DepartureFilter { _ in true }
+
+    /// 指定した種別と行き先の発車を除外する（種別・行き先のない発車は除外しない）
+    public init(excludedTypes: Set<String>, excludedDestinations: Set<String>) {
+        if excludedTypes.isEmpty && excludedDestinations.isEmpty {
+            self = .all
+            return
+        }
+        self.init { departure in
+            !(departure.type.map(excludedTypes.contains) ?? false)
+                && !(departure.destination.map(excludedDestinations.contains) ?? false)
+        }
+    }
 
     public func includes(_ departure: Departure) -> Bool {
         predicate(departure)

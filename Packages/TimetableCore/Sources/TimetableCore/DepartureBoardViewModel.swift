@@ -193,7 +193,8 @@ public final class DepartureBoardViewModel {
         let serviceDay = service.resolver.moment(at: date).serviceDay
         guard let effective = Timetable.effective(among: timetables, on: serviceDay),
               let board = service.board(
-                at: date, timetables: timetables, minutesToStation: minutesToStation, count: displayCount)
+                at: date, timetables: timetables, minutesToStation: minutesToStation, count: displayCount,
+                filter: selectedProfile?.filter ?? .all)
         else {
             status = .notYetEffective(timetables.map(\.validFrom).min()!)
             board = nil
@@ -203,6 +204,15 @@ public final class DepartureBoardViewModel {
         self.timetable = effective
         self.board = board
         status = .ready
+    }
+
+    /// 表示中の路線の時刻表に含まれる種別と行き先（絞り込みの候補）
+    public var filterCandidates: (types: [String], destinations: [String]) {
+        let departures = (selectedRouteKey.flatMap { routes[$0] } ?? [])
+            .flatMap { $0.calendars.values.joined() }
+        return (
+            Set(departures.compactMap(\.type)).sorted(),
+            Set(departures.compactMap(\.destination)).sorted())
     }
 
     // MARK: - 表示用の文字列
