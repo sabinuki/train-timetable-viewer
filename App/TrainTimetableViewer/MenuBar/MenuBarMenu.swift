@@ -14,6 +14,7 @@ struct MenuBarMenu: View {
         Button(model.isPanelVisible ? "パネルを隠す" : "パネルを表示") {
             model.togglePanel()
         }
+        .keyboardShortcut("t", modifiers: [.option, .command])
         .disabled(!model.canShowPanel)
         Button("設定…") {
             openSettings()

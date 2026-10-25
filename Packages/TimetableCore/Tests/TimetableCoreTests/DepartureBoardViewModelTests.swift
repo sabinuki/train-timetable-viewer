@@ -132,3 +132,28 @@ private func makeTimetable(station: String = "s", validFrom: String = "2026-03-1
         #expect(nextMinuteBoundary(after: tokyoDate(2026, 10, 26, 23, 59, 30)) == tokyoDate(2026, 10, 27, 0, 0, 0))
     }
 }
+
+@Suite struct AppSettingsTests {
+    private func makeSettings() -> AppSettings {
+        let suite = "AppSettingsTests-\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defaults.removePersistentDomain(forName: suite)
+        return AppSettings(defaults: defaults)
+    }
+
+    @Test func defaults() {
+        let settings = makeSettings()
+        #expect(settings.minutesToStation == 0)
+        #expect(settings.selectedRouteKey == nil)
+        #expect(settings.isPanelVisible)
+        #expect(settings.displayCount == AppSettings.defaultDisplayCount)
+    }
+
+    @Test func persistsPanelVisibility() {
+        let settings = makeSettings()
+        settings.isPanelVisible = false
+        #expect(!AppSettings(defaults: settings.defaults).isPanelVisible)
+        settings.isPanelVisible = true
+        #expect(AppSettings(defaults: settings.defaults).isPanelVisible)
+    }
+}
