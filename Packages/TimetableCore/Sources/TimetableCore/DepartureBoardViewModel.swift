@@ -43,9 +43,30 @@ public final class DepartureBoardViewModel {
         }
     }
 
-    public let displayCount: Int
+    /// パネルに表示する本数（3〜10）
+    public var displayCount: Int {
+        didSet { saveAndRefresh { $0.displayCount = displayCount } }
+    }
 
-    @ObservationIgnored private let service: DepartureService
+    /// メニューバーの表示形式
+    public var menuBarStyle: MenuBarStyle {
+        didSet { saveAndRefresh { $0.menuBarStyle = menuBarStyle } }
+    }
+
+    /// 残り時間を秒単位で表示するか（オンのときは 1 秒ごとに再計算する）
+    public var showsSeconds: Bool {
+        didSet { saveAndRefresh { $0.showsSeconds = showsSeconds } }
+    }
+
+    /// 土休日ダイヤとして扱う追加の日
+    public var additionalHolidays: Set<CalendarDate> {
+        didSet {
+            service.resolver.additionalHolidays = additionalHolidays
+            saveAndRefresh { $0.additionalHolidays = additionalHolidays }
+        }
+    }
+
+    @ObservationIgnored private var service: DepartureService
     @ObservationIgnored private let settings: AppSettings
     @ObservationIgnored private let now: () -> Date
 
@@ -54,6 +75,10 @@ public final class DepartureBoardViewModel {
         self.settings = settings
         self.now = now
         self.displayCount = settings.displayCount
+        self.menuBarStyle = settings.menuBarStyle
+        self.showsSeconds = settings.showsSeconds
+        self.additionalHolidays = settings.additionalHolidays
+        self.service.resolver.additionalHolidays = settings.additionalHolidays
         self.profiles = settings.profiles ?? []
         self.selectedProfileID = settings.selectedProfileID
     }
@@ -158,6 +183,11 @@ public final class DepartureBoardViewModel {
         }
     }
 
+    private func saveAndRefresh(_ save: (AppSettings) -> Void) {
+        save(settings)
+        refresh()
+    }
+
     private func saveProfiles() {
         settings.profiles = profiles
         settings.selectedProfileID = selectedProfileID
@@ -222,26 +252,41 @@ public final class DepartureBoardViewModel {
         board?.nextCatchable ?? board?.departures.first
     }
 
-    /// メニューバーの表示（例: `18:05 あと12分`）
+    /// メニューバーの表示（例: `18:05 あと12分`）。アイコンのみの形式では空
     public var menuBarTitle: String {
         switch status {
         case .noTimetable:
-            return "時刻表なし"
+            return menuBarStyle == .iconOnly ? "" : "時刻表なし"
         case .notYetEffective(let date):
-            return "\(date.month)/\(date.day) から"
+            return menuBarStyle == .iconOnly ? "" : "\(date.month)/\(date.day) から"
         case .ready:
+            guard menuBarStyle != .iconOnly else { return "" }
             guard let board, let departure = headlineDeparture else { return "本日終了" }
             let time = departure.departure.time.clockDescription
             if board.isServiceEnded {
                 return "始発 \(time)"
             }
-            return "\(time) \(remainingText(until: departure.departureDate))"
+            switch menuBarStyle {
+            case .leaveBy where departure.isCatchable:
+                return "\(clockText(departure.leaveByDate)) 出発 \(remainingText(until: departure.leaveByDate))"
+            default:
+                return "\(time) \(remainingText(until: departure.departureDate))"
+            }
         }
     }
 
-    /// 発車や出発すべき時刻までの残り時間（例: `あと12分`）
+    /// 発車や出発すべき時刻までの残り時間（例: `あと12分`、秒表示では `あと12分30秒`）
     public func remainingText(until date: Date) -> String {
-        let minutes = Int((date.timeIntervalSince(board?.now ?? now()) / 60).rounded(.down))
+        let interval = date.timeIntervalSince(board?.now ?? now())
+        if showsSeconds {
+            let seconds = Int(interval.rounded(.down))
+            if seconds < 0 { return "発車済み" }
+            if seconds < 60 { return "あと\(seconds)秒" }
+            let minutes = seconds / 60
+            if minutes >= 60 { return "あと\(minutes / 60)時間\(minutes % 60)分\(seconds % 60)秒" }
+            return "あと\(minutes)分\(seconds % 60)秒"
+        }
+        let minutes = Int((interval / 60).rounded(.down))
         if minutes < 0 { return "発車済み" }
         if minutes == 0 { return "まもなく" }
         if minutes >= 60 { return "あと\(minutes / 60)時間\(minutes % 60)分" }
@@ -259,4 +304,9 @@ public final class DepartureBoardViewModel {
 public func nextMinuteBoundary(after date: Date) -> Date {
     let seconds = date.timeIntervalSinceReferenceDate
     return Date(timeIntervalSinceReferenceDate: (seconds / 60).rounded(.down) * 60 + 60)
+}
+
+/// 秒表示のときに次に再計算する時刻（次の秒の 0 ミリ秒）
+public func nextSecondBoundary(after date: Date) -> Date {
+    Date(timeIntervalSinceReferenceDate: date.timeIntervalSinceReferenceDate.rounded(.down) + 1)
 }
