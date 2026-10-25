@@ -118,7 +118,7 @@ final class AppModel {
 
         let timetable = try await repository.importTimetable(from: LocalFileProvider(url: url))
         reloadTimetables()
-        viewModel.selectRoute(timetable.routeKey)
+        viewModel.showRoute(timetable.routeKey)
         return timetable
     }
 

@@ -11,6 +11,8 @@ public struct AppSettings {
     private enum Key {
         static let minutesToStation = "minutesToStation"
         static let selectedRouteKey = "selectedRouteKey"
+        static let profiles = "profiles"
+        static let selectedProfileID = "selectedProfileID"
         static let isPanelVisible = "isPanelVisible"
         static let panelOpacity = "panelOpacity"
         static let isClickThrough = "isClickThrough"
@@ -20,16 +22,31 @@ public struct AppSettings {
         self.defaults = defaults
     }
 
-    /// 駅までの所要時間（分）。初期値は 0
-    public var minutesToStation: Int {
-        get { Self.clamp(defaults.integer(forKey: Key.minutesToStation)) }
-        nonmutating set { defaults.set(Self.clamp(newValue), forKey: Key.minutesToStation) }
+    /// 路線プロファイル。保存されていなければ `nil`
+    public var profiles: [RouteProfile]? {
+        get {
+            guard let data = defaults.data(forKey: Key.profiles) else { return nil }
+            return try? JSONDecoder().decode([RouteProfile].self, from: data)
+        }
+        nonmutating set {
+            defaults.set(newValue.flatMap { try? JSONEncoder().encode($0) }, forKey: Key.profiles)
+        }
     }
 
-    /// 表示中の駅・路線・方面（`Timetable.routeKey`）
-    public var selectedRouteKey: String? {
-        get { defaults.string(forKey: Key.selectedRouteKey) }
-        nonmutating set { defaults.set(newValue, forKey: Key.selectedRouteKey) }
+    /// 表示中の路線プロファイル
+    public var selectedProfileID: UUID? {
+        get { defaults.string(forKey: Key.selectedProfileID).flatMap(UUID.init(uuidString:)) }
+        nonmutating set { defaults.set(newValue?.uuidString, forKey: Key.selectedProfileID) }
+    }
+
+    /// 路線プロファイル導入前（#19 より前）の駅までの所要時間。移行にだけ使う
+    var legacyMinutesToStation: Int? {
+        defaults.object(forKey: Key.minutesToStation) == nil ? nil : Self.clamp(defaults.integer(forKey: Key.minutesToStation))
+    }
+
+    /// 路線プロファイル導入前の表示中の駅・路線・方面。移行にだけ使う
+    var legacySelectedRouteKey: String? {
+        defaults.string(forKey: Key.selectedRouteKey)
     }
 
     /// フローティングパネルを表示しているか。初期値は表示
@@ -61,7 +78,7 @@ public struct AppSettings {
         Self.defaultDisplayCount
     }
 
-    static func clamp(_ minutes: Int) -> Int {
+    public static func clamp(_ minutes: Int) -> Int {
         min(max(minutes, minutesToStationRange.lowerBound), minutesToStationRange.upperBound)
     }
 }
