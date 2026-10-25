@@ -37,19 +37,32 @@ public struct RouteProfile: Hashable, Identifiable, Sendable {
     /// 駅までの所要時間（分）
     public var minutesToStation: Int
     public var notification: NotificationSettings
+    /// 表示しない種別（例: 特急）
+    public var excludedTypes: Set<String>
+    /// 表示しない行き先
+    public var excludedDestinations: Set<String>
 
     public init(
         id: UUID = UUID(),
         name: String,
         routeKey: String?,
         minutesToStation: Int = 0,
-        notification: NotificationSettings = NotificationSettings()
+        notification: NotificationSettings = NotificationSettings(),
+        excludedTypes: Set<String> = [],
+        excludedDestinations: Set<String> = []
     ) {
         self.id = id
         self.name = name
         self.routeKey = routeKey
         self.minutesToStation = AppSettings.clamp(minutesToStation)
         self.notification = notification
+        self.excludedTypes = excludedTypes
+        self.excludedDestinations = excludedDestinations
+    }
+
+    /// 種別と行き先の除外を反映した絞り込み条件
+    public var filter: DepartureFilter {
+        DepartureFilter(excludedTypes: excludedTypes, excludedDestinations: excludedDestinations)
     }
 
     /// 時刻表から付ける既定の名前（例: `〇〇駅 ××方面`）
@@ -61,7 +74,7 @@ public struct RouteProfile: Hashable, Identifiable, Sendable {
 
 extension RouteProfile: Codable {
     private enum CodingKeys: String, CodingKey {
-        case id, name, routeKey, minutesToStation, notification
+        case id, name, routeKey, minutesToStation, notification, excludedTypes, excludedDestinations
     }
 
     /// 後から追加した項目（通知など）がない保存値も読めるようにする
@@ -73,6 +86,8 @@ extension RouteProfile: Codable {
             routeKey: try container.decodeIfPresent(String.self, forKey: .routeKey),
             minutesToStation: try container.decodeIfPresent(Int.self, forKey: .minutesToStation) ?? 0,
             notification: try container.decodeIfPresent(NotificationSettings.self, forKey: .notification)
-                ?? NotificationSettings())
+                ?? NotificationSettings(),
+            excludedTypes: try container.decodeIfPresent(Set<String>.self, forKey: .excludedTypes) ?? [],
+            excludedDestinations: try container.decodeIfPresent(Set<String>.self, forKey: .excludedDestinations) ?? [])
     }
 }
