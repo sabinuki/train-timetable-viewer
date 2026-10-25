@@ -1,0 +1,7 @@
+// 署名設定。既定は ad-hoc 署名（Sign to Run Locally）。
+// Local.xcconfig（コミットしない）があれば、その設定で上書きする。作り方は Local.xcconfig.example を参照。
+CODE_SIGN_STYLE = Automatic
+CODE_SIGN_IDENTITY = -
+DEVELOPMENT_TEAM =
+
+#include? "Local.xcconfig"
