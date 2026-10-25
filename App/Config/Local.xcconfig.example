@@ -1,0 +1,4 @@
+// 無料の Apple ID（Personal Team）で署名する場合は、このファイルを Local.xcconfig にコピーして Team ID を設定する。
+// Team ID は Xcode の Settings > Accounts で確認できる。
+CODE_SIGN_IDENTITY = Apple Development
+DEVELOPMENT_TEAM = XXXXXXXXXX

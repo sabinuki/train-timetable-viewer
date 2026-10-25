@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Xcode
+xcuserdata/
+DerivedData/
+*.xcuserstate
+
+# ターミナルからのビルド成果物
+/build/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# 個人の署名設定（Team ID）。App/Config/Local.xcconfig.example を参照
+App/Config/Local.xcconfig
