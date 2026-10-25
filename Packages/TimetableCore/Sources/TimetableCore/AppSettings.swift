@@ -10,6 +10,7 @@ public struct AppSettings {
     private enum Key {
         static let minutesToStation = "minutesToStation"
         static let selectedRouteKey = "selectedRouteKey"
+        static let isPanelVisible = "isPanelVisible"
     }
 
     public init(defaults: UserDefaults = .standard) {
@@ -26,6 +27,12 @@ public struct AppSettings {
     public var selectedRouteKey: String? {
         get { defaults.string(forKey: Key.selectedRouteKey) }
         nonmutating set { defaults.set(newValue, forKey: Key.selectedRouteKey) }
+    }
+
+    /// フローティングパネルを表示しているか。初期値は表示
+    public var isPanelVisible: Bool {
+        get { defaults.object(forKey: Key.isPanelVisible) as? Bool ?? true }
+        nonmutating set { defaults.set(newValue, forKey: Key.isPanelVisible) }
     }
 
     /// パネルに表示する本数。設定画面からの変更は #20 で追加する
