@@ -1,0 +1,27 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show toolchain
+        run: |
+          xcodebuild -version
+          swift --version
+      - name: Test TimetableCore
+        run: swift test --package-path Packages/TimetableCore
+      - name: Build app
+        run: >
+          xcodebuild
+          -project App/TrainTimetableViewer.xcodeproj
+          -scheme TrainTimetableViewer
+          -destination 'platform=macOS,arch=arm64'
+          -derivedDataPath build
+          CODE_SIGN_IDENTITY=-
+          build
