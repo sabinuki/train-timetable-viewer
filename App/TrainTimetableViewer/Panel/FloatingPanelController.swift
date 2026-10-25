@@ -61,6 +61,16 @@ final class FloatingPanelController: NSObject, NSWindowDelegate {
         panel.orderOut(nil)
     }
 
+    /// 不透明度（0〜1）
+    func setOpacity(_ opacity: Double) {
+        panel.alphaValue = opacity
+    }
+
+    /// クリックを下のウィンドウに素通しするか
+    func setClickThrough(_ enabled: Bool) {
+        panel.ignoresMouseEvents = enabled
+    }
+
     func windowWillClose(_ notification: Notification) {
         onClose?()
     }

@@ -16,6 +16,7 @@ struct MenuBarMenu: View {
         }
         .keyboardShortcut("t", modifiers: [.option, .command])
         .disabled(!model.canShowPanel)
+        Toggle("パネルのクリックを透過", isOn: Bindable(model).isClickThrough)
         Button("設定…") {
             openSettings()
             NSApplication.shared.activate()

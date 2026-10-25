@@ -62,6 +62,21 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
             }
 
+            Section("パネル") {
+                LabeledContent("不透明度") {
+                    HStack {
+                        Slider(value: Bindable(model).panelOpacity, in: AppSettings.panelOpacityRange)
+                        Text(model.panelOpacity, format: .percent.precision(.fractionLength(0)))
+                            .monospacedDigit()
+                            .frame(width: 44, alignment: .trailing)
+                    }
+                }
+                Toggle("クリックを透過する", isOn: Bindable(model).isClickThrough)
+                Text("透過中はパネルの上から下のウィンドウを操作できます。解除はメニューバーの「パネルのクリックを透過」から行えます")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             Section("起動") {
                 Toggle("ログイン時に起動", isOn: Binding(
                     get: { model.launchAtLogin.isEnabled || model.launchAtLogin.requiresApproval },

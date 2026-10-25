@@ -45,11 +45,29 @@ final class AppModel {
     var canShowPanel: Bool { panel != nil }
     @ObservationIgnored private var panel: FloatingPanelController?
 
+    /// パネルの不透明度（0.3〜1.0）
+    var panelOpacity: Double = 1.0 {
+        didSet {
+            settings.panelOpacity = panelOpacity
+            panel?.setOpacity(settings.panelOpacity)
+        }
+    }
+
+    /// パネルへのクリックを下のウィンドウに素通しするか（解除はメニューバーから）
+    var isClickThrough = false {
+        didSet {
+            settings.isClickThrough = isClickThrough
+            panel?.setClickThrough(isClickThrough)
+        }
+    }
+
     /// パネルを用意し、前回の表示状態を復元する
     private func setUpPanel() {
         let panel = FloatingPanelController(rootView: DeparturePanelView(viewModel: viewModel))
         panel.onClose = { [weak self] in self?.panelDidHide() }
         self.panel = panel
+        panelOpacity = settings.panelOpacity
+        isClickThrough = settings.isClickThrough
         if settings.isPanelVisible {
             showPanel()
         }

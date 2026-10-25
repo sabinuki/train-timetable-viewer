@@ -147,6 +147,21 @@ private func makeTimetable(station: String = "s", validFrom: String = "2026-03-1
         #expect(settings.selectedRouteKey == nil)
         #expect(settings.isPanelVisible)
         #expect(settings.displayCount == AppSettings.defaultDisplayCount)
+        #expect(settings.panelOpacity == 1.0)
+        #expect(!settings.isClickThrough)
+    }
+
+    @Test func clampsAndPersistsPanelAppearance() {
+        let settings = makeSettings()
+        settings.panelOpacity = 0.5
+        #expect(AppSettings(defaults: settings.defaults).panelOpacity == 0.5)
+        settings.panelOpacity = 0.1
+        #expect(settings.panelOpacity == AppSettings.panelOpacityRange.lowerBound)
+        settings.panelOpacity = 2
+        #expect(settings.panelOpacity == AppSettings.panelOpacityRange.upperBound)
+
+        settings.isClickThrough = true
+        #expect(AppSettings(defaults: settings.defaults).isClickThrough)
     }
 
     @Test func persistsPanelVisibility() {
