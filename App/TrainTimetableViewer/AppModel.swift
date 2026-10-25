@@ -12,6 +12,7 @@ final class AppModel {
     /// グローバルショートカットを登録できたか
     private(set) var isHotKeyRegistered = false
     let launchAtLogin = LaunchAtLogin()
+    let notifications = NotificationScheduler()
 
     @ObservationIgnored let repository: TimetableRepository
     @ObservationIgnored private let settings: AppSettings
@@ -28,6 +29,10 @@ final class AppModel {
             directory: TimetableRepository.defaultDirectory(
                 bundleIdentifier: Bundle.main.bundleIdentifier ?? "com.sabinuki.TrainTimetableViewer"))
 
+        viewModel.onRefresh = { [weak self] in
+            guard let self else { return }
+            notifications.update(viewModel.plannedNotification)
+        }
         reloadTimetables()
         let clock = RefreshClock { [weak self] in self?.viewModel.refresh() }
         clock.start()

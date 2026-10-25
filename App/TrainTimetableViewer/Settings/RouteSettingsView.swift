@@ -15,6 +15,9 @@ struct RouteSettingsView: View {
     var body: some View {
         Form {
             profileSection
+            if let profile = viewModel.selectedProfile {
+                notificationSection(profile)
+            }
             timetableSection
         }
         .formStyle(.grouped)
@@ -86,6 +89,66 @@ struct RouteSettingsView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    // MARK: - 通知
+
+    private func notificationSection(_ profile: RouteProfile) -> some View {
+        Section {
+            Toggle("出発すべき時刻の前に通知", isOn: Binding(
+                get: { viewModel.selectedProfile?.notification.isEnabled ?? false },
+                set: { enabled in
+                    binding(for: profile, \.notification.isEnabled).wrappedValue = enabled
+                    if enabled {
+                        Task { await model.notifications.requestAuthorization() }
+                    }
+                }))
+            if profile.notification.isEnabled {
+                Stepper(value: binding(for: profile, \.notification.minutesBefore), in: NotificationSettings.minutesBeforeRange) {
+                    LabeledContent("通知するタイミング") {
+                        Text("出発すべき時刻の \(profile.notification.minutesBefore) 分前")
+                    }
+                }
+                LabeledContent("通知する時間帯") {
+                    HStack(spacing: 4) {
+                        DatePicker("開始", selection: timeBinding(for: profile, \.notification.windowStart), displayedComponents: .hourAndMinute)
+                            .labelsHidden()
+                        Text("〜")
+                        DatePicker("終了", selection: timeBinding(for: profile, \.notification.windowEnd), displayedComponents: .hourAndMinute)
+                            .labelsHidden()
+                    }
+                }
+                if model.notifications.isDenied {
+                    HStack {
+                        Text("通知が許可されていません")
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                        Spacer()
+                        Button("システム設定を開く") { model.notifications.openSystemSettings() }
+                    }
+                }
+            }
+        } header: {
+            Text("通知")
+        } footer: {
+            Text("時間帯の中に通知時刻が来る、乗れる電車のうち最初の 1 本を通知します。開始と終了を同じ時刻にすると終日通知します")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .task { await model.notifications.refreshAuthorizationStatus() }
+    }
+
+    /// 0:00 からの分を `DatePicker` で編集する
+    private func timeBinding(for profile: RouteProfile, _ keyPath: WritableKeyPath<RouteProfile, Int>) -> Binding<Date> {
+        let minutes = binding(for: profile, keyPath)
+        let calendar = Calendar.current
+        let reference = calendar.startOfDay(for: Date(timeIntervalSinceReferenceDate: 0))
+        return Binding(
+            get: { calendar.date(byAdding: .minute, value: minutes.wrappedValue, to: reference) ?? reference },
+            set: { date in
+                let components = calendar.dateComponents([.hour, .minute], from: date)
+                minutes.wrappedValue = (components.hour ?? 0) * 60 + (components.minute ?? 0)
+            })
     }
 
     private func binding<Value>(for profile: RouteProfile, _ keyPath: WritableKeyPath<RouteProfile, Value>) -> Binding<Value> {
