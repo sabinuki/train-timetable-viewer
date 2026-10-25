@@ -60,6 +60,36 @@ struct GeneralSettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+
+            Section {
+                LabeledContent("収録範囲") {
+                    Text(viewModel.holidays.lastDate.map { "\(Self.format($0)) まで" } ?? "なし")
+                }
+                LabeledContent("最終取得") {
+                    Text(model.holidaysLastFetched.map { $0.formatted(date: .abbreviated, time: .shortened) } ?? "未取得（アプリに同梱したデータを使用）")
+                }
+                HStack {
+                    if let message = model.holidayUpdateMessage {
+                        Text(message)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    if model.isUpdatingHolidays {
+                        ProgressView().controlSize(.small)
+                    }
+                    Button("今すぐ更新") {
+                        Task { await model.updateHolidays(force: true) }
+                    }
+                    .disabled(model.isUpdatingHolidays)
+                }
+            } header: {
+                Text("祝日データ")
+            } footer: {
+                Text("内閣府「国民の祝日」の CSV を、起動時に 30 日ごとに取得します。取得できない場合は、保存済みまたはアプリに同梱したデータを使います")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
         .formStyle(.grouped)
         .fixedSize(horizontal: false, vertical: true)
