@@ -7,6 +7,7 @@ struct SettingsView: View {
     let model: AppModel
 
     @State private var isImporting = false
+    @State private var errorTitle = ""
     @State private var errorMessage: String?
     @State private var importedMessage: String?
 
@@ -60,8 +61,24 @@ struct SettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+
+            Section("起動") {
+                Toggle("ログイン時に起動", isOn: Binding(
+                    get: { model.launchAtLogin.isEnabled || model.launchAtLogin.requiresApproval },
+                    set: { setLaunchAtLogin($0) }))
+                if model.launchAtLogin.requiresApproval {
+                    HStack {
+                        Text("システム設定の「ログイン項目」で許可してください")
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                        Spacer()
+                        Button("システム設定を開く") { model.launchAtLogin.openSystemSettings() }
+                    }
+                }
+            }
         }
         .formStyle(.grouped)
+        .onAppear { model.launchAtLogin.refresh() }
         .frame(width: 460)
         .fixedSize(horizontal: false, vertical: true)
         .fileImporter(isPresented: $isImporting, allowedContentTypes: [.json]) { result in
@@ -69,11 +86,12 @@ struct SettingsView: View {
             case .success(let url):
                 importTimetable(from: url)
             case .failure(let error):
+                errorTitle = "時刻表を取り込めません"
                 errorMessage = error.localizedDescription
             }
         }
         .alert(
-            "時刻表を取り込めません",
+            errorTitle,
             isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } }),
             presenting: errorMessage
         ) { _ in
@@ -89,8 +107,18 @@ struct SettingsView: View {
                 let timetable = try await model.importTimetable(from: url)
                 importedMessage = "\(timetable.station.name) \(timetable.line.name) \(timetable.direction.name)（\(timetable.validFrom.description) から）を取り込みました"
             } catch {
+                errorTitle = "時刻表を取り込めません"
                 errorMessage = error.localizedDescription
             }
+        }
+    }
+
+    private func setLaunchAtLogin(_ enabled: Bool) {
+        do {
+            try model.launchAtLogin.setEnabled(enabled)
+        } catch {
+            errorTitle = "ログイン時の起動を変更できません"
+            errorMessage = error.localizedDescription
         }
     }
 
@@ -99,6 +127,7 @@ struct SettingsView: View {
             try model.deleteTimetable(timetable)
             importedMessage = nil
         } catch {
+            errorTitle = "時刻表を削除できません"
             errorMessage = error.localizedDescription
         }
     }
