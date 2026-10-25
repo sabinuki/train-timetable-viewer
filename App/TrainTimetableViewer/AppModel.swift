@@ -26,13 +26,36 @@ final class AppModel {
         let clock = RefreshClock { [weak self] in self?.viewModel.refresh() }
         clock.start()
         self.clock = clock
+        setUpPanel()
     }
 
-    // MARK: - パネル（#11、#12 で実装する）
+    // MARK: - パネル
 
-    var isPanelVisible: Bool { false }
-    var canShowPanel: Bool { false }
-    func togglePanel() {}
+    private(set) var isPanelVisible = false
+    var canShowPanel: Bool { panel != nil }
+    @ObservationIgnored private var panel: FloatingPanelController?
+
+    /// パネルを用意して表示する。表示状態の保存とショートカットは #12 で実装する
+    private func setUpPanel() {
+        let panel = FloatingPanelController(rootView: DeparturePanelView(viewModel: viewModel))
+        panel.onClose = { [weak self] in self?.isPanelVisible = false }
+        self.panel = panel
+        showPanel()
+    }
+
+    func showPanel() {
+        panel?.show()
+        isPanelVisible = panel?.isVisible ?? false
+    }
+
+    func hidePanel() {
+        panel?.hide()
+        isPanelVisible = false
+    }
+
+    func togglePanel() {
+        if isPanelVisible { hidePanel() } else { showPanel() }
+    }
 
     /// 保存済みの時刻表を読み込み直す
     func reloadTimetables() {
