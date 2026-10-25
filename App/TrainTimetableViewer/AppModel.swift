@@ -28,6 +28,12 @@ final class AppModel {
         self.clock = clock
     }
 
+    // MARK: - パネル（#11、#12 で実装する）
+
+    var isPanelVisible: Bool { false }
+    var canShowPanel: Bool { false }
+    func togglePanel() {}
+
     /// 保存済みの時刻表を読み込み直す
     func reloadTimetables() {
         let stored = repository.loadAll()
