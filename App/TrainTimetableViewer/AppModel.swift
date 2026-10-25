@@ -11,6 +11,7 @@ final class AppModel {
     private(set) var loadFailures: [String] = []
     /// グローバルショートカットを登録できたか
     private(set) var isHotKeyRegistered = false
+    let launchAtLogin = LaunchAtLogin()
 
     @ObservationIgnored let repository: TimetableRepository
     @ObservationIgnored private let settings: AppSettings
