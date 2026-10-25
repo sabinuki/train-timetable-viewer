@@ -163,9 +163,25 @@ public final class DepartureBoardViewModel {
         settings.selectedProfileID = selectedProfileID
     }
 
+    /// 次に出す通知（表示中のプロファイルで通知がオンのとき）
+    public private(set) var plannedNotification: PlannedNotification?
+
+    /// 再計算のたびに呼ばれる（通知の登録し直しなど）
+    @ObservationIgnored public var onRefresh: (() -> Void)?
+
     /// 現在時刻で再計算する
     public func refresh() {
         let date = now()
+        recalculate(at: date)
+        let planned = NotificationPlanner.plan(
+            board: board, profile: selectedProfile, now: date, calendar: service.resolver.calendar)
+        if planned != plannedNotification {
+            plannedNotification = planned
+        }
+        onRefresh?()
+    }
+
+    private func recalculate(at date: Date) {
         let timetables = selectedRouteKey.flatMap { routes[$0] } ?? []
         guard !timetables.isEmpty else {
             status = .noTimetable
