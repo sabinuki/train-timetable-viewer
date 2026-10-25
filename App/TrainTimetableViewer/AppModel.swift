@@ -78,10 +78,38 @@ final class AppModel {
 
     // MARK: - 時刻表
 
+    /// 保存済みの時刻表（駅・路線・方面、改正日の順）
+    private(set) var storedTimetables: [Timetable] = []
+
     /// 保存済みの時刻表を読み込み直す
     func reloadTimetables() {
         let stored = repository.loadAll()
         loadFailures = stored.failures.map { "\($0.fileName): \($0.message)" }
+        storedTimetables = stored.timetables.sorted {
+            ($0.routeKey, $0.validFrom) < ($1.routeKey, $1.validFrom)
+        }
         viewModel.load(stored.timetables)
+    }
+
+    /// 時刻表 JSON を取り込み、その駅・路線・方面を表示する
+    @discardableResult
+    func importTimetable(from url: URL) async throws -> Timetable {
+        let accessing = url.startAccessingSecurityScopedResource()
+        defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+
+        let timetable = try await repository.importTimetable(from: LocalFileProvider(url: url))
+        reloadTimetables()
+        viewModel.selectRoute(timetable.routeKey)
+        return timetable
+    }
+
+    /// アプリに同梱したサンプル時刻表
+    var sampleTimetableURL: URL? {
+        Bundle.main.url(forResource: "SampleTimetable", withExtension: "json")
+    }
+
+    func deleteTimetable(_ timetable: Timetable) throws {
+        try repository.delete(timetable)
+        reloadTimetables()
     }
 }
