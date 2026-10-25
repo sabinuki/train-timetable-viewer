@@ -16,18 +16,22 @@ final class AppModel {
 
     @ObservationIgnored let repository: TimetableRepository
     @ObservationIgnored private let settings: AppSettings
+    @ObservationIgnored private let holidayUpdater: HolidayUpdater
     @ObservationIgnored private var clock: RefreshClock?
     @ObservationIgnored private var hotKey: GlobalHotKey?
 
     init(defaults: UserDefaults = .standard) {
         settings = AppSettings(defaults: defaults)
-        let holidays = (try? HolidayRepository.loadBundled()) ?? HolidayCalendar(names: [:])
+        let bundleIdentifier = Bundle.main.bundleIdentifier ?? "com.sabinuki.TrainTimetableViewer"
+        // 取得済みの祝日データが同梱版より新しければそちらを使う
+        holidayUpdater = HolidayUpdater(storageURL: HolidayUpdater.defaultStorageURL(bundleIdentifier: bundleIdentifier))
+        let holidays = holidayUpdater.loadCurrent(bundled: try? HolidayRepository.loadBundled())
         viewModel = DepartureBoardViewModel(
             service: DepartureService(resolver: ServiceDayResolver(holidays: holidays)),
             settings: settings)
         repository = TimetableRepository(
-            directory: TimetableRepository.defaultDirectory(
-                bundleIdentifier: Bundle.main.bundleIdentifier ?? "com.sabinuki.TrainTimetableViewer"))
+            directory: TimetableRepository.defaultDirectory(bundleIdentifier: bundleIdentifier))
+        holidaysLastFetched = settings.holidaysLastFetched
 
         viewModel.onRefresh = { [weak self] in
             guard let self else { return }
@@ -44,6 +48,39 @@ final class AppModel {
         let hotKey = GlobalHotKey(setting: hotKeySetting) { [weak self] in self?.togglePanel() }
         isHotKeyRegistered = hotKey.register()
         self.hotKey = hotKey
+
+        Task { await updateHolidays() }
+    }
+
+    // MARK: - 祝日データ
+
+    /// 祝日データを最後に取得できた日時
+    private(set) var holidaysLastFetched: Date?
+    private(set) var isUpdatingHolidays = false
+    /// 直近の手動更新の結果
+    private(set) var holidayUpdateMessage: String?
+
+    /// 前回の取得から 30 日以上たっていれば内閣府の CSV を取得する。`force` なら期間にかかわらず取得する。
+    /// オフラインなどで失敗した場合は、今の祝日データ（保存済みまたは同梱）を使い続ける
+    func updateHolidays(force: Bool = false) async {
+        guard !isUpdatingHolidays else { return }
+        isUpdatingHolidays = true
+        defer { isUpdatingHolidays = false }
+
+        let updated = await holidayUpdater.updateIfNeeded(
+            now: Date(),
+            lastFetched: force ? nil : settings.holidaysLastFetched,
+            current: viewModel.holidays,
+            fetch: urlSessionHolidayFetch)
+        if let updated {
+            viewModel.setHolidays(updated)
+            let now = Date()
+            settings.holidaysLastFetched = now
+            holidaysLastFetched = now
+            holidayUpdateMessage = force ? "更新しました" : nil
+        } else if force {
+            holidayUpdateMessage = "取得できませんでした。ネットワークを確認してください"
+        }
     }
 
     // MARK: - 表示

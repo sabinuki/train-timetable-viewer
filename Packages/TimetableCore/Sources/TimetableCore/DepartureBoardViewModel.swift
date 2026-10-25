@@ -183,6 +183,17 @@ public final class DepartureBoardViewModel {
         }
     }
 
+    /// 祝日データを差し替えて再計算する（祝日データの自動更新後）
+    public func setHolidays(_ holidays: HolidayCalendar) {
+        service.resolver.holidays = holidays
+        refresh()
+    }
+
+    /// 使用中の祝日データ
+    public var holidays: HolidayCalendar {
+        service.resolver.holidays
+    }
+
     private func saveAndRefresh(_ save: (AppSettings) -> Void) {
         save(settings)
         refresh()

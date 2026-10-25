@@ -22,6 +22,7 @@ public struct AppSettings {
         static let showsSeconds = "showsSeconds"
         static let additionalHolidays = "additionalHolidays"
         static let hotKey = "hotKey"
+        static let holidaysLastFetched = "holidaysLastFetched"
     }
 
     public init(defaults: UserDefaults = .standard) {
@@ -106,6 +107,12 @@ public struct AppSettings {
     public var additionalHolidays: Set<CalendarDate> {
         get { Set((defaults.stringArray(forKey: Key.additionalHolidays) ?? []).compactMap(CalendarDate.init(string:))) }
         nonmutating set { defaults.set(newValue.sorted().map(\.description), forKey: Key.additionalHolidays) }
+    }
+
+    /// 祝日データを最後に取得できた日時
+    public var holidaysLastFetched: Date? {
+        get { defaults.object(forKey: Key.holidaysLastFetched) as? Date }
+        nonmutating set { defaults.set(newValue, forKey: Key.holidaysLastFetched) }
     }
 
     /// パネルの表示を切り替えるグローバルショートカット
